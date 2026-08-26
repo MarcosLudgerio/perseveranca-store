@@ -33,10 +33,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">
-          Área Administrativa - Pastoral
+    <div className="min-h-screen flex items-center justify-center bg-tertiary p-4">
+      <div className="max-w-md bg-white  w-full rounded-lg shadow-md p-4">
+        <h1 className="text-2xl font-bold text-center font-besley text-primary uppercase mb-6">
+          Área Administrativa
         </h1>
 
         {error && (
@@ -55,7 +55,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border text-brand border-gray-500 rounded focus:ring-2 focus:ring-primary outline-none"
               placeholder="seu@email.com"
             />
           </div>
@@ -69,15 +69,14 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border text-brand border-gray-300 rounded focus:ring-2 focus:ring-primary outline-none"
               placeholder="••••••••"
             />
           </div>
-
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition duration-200 disabled:opacity-50"
+            className="w-full bg-secondary hover:bg-[#727432] text-white font-bold py-3 rounded-lg transition-colors disabled:opacity-50 mt-4"
           >
             {loading ? 'Entrando...' : 'Entrar'}
           </button>

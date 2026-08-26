@@ -50,7 +50,7 @@ export default async function Home() {
           </div>
         ) : (
           <div className="text-center py-20 bg-white rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-xl font-semibold text-brandText mb-2">Nenhum produto disponível no momento</h2>
+            <h2 className="text-xl font-semibold text-brand mb-2">Nenhum produto disponível no momento</h2>
             <p className="text-gray-500">Volte mais tarde para conferir nossas novidades!</p>
           </div>
         )}

@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-br"
-      className={`${besley.variable} h-full antialiased`}
+      className={`${besley.variable} text-primary h-full antialiased`}
     >
       <body className="flex flex-col">{children}</body>
     </html>
