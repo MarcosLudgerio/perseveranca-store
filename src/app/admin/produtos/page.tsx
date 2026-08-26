@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { uploadImageToCloudinary } from '@/lib/cloudinary'
 import { Category, Product } from '@/types'
 import { useRouter } from 'next/navigation'
+import { formatCurrency } from '@/lib/formatters'
 
 export default function AdminProductsPage() {
     const supabase = createClient()
@@ -324,15 +325,18 @@ export default function AdminProductsPage() {
                                         className="border p-2 rounded-lg text-gray-700 focus:ring-2 focus:ring-secondary outline-none flex-1"
                                         required
                                     />
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        placeholder="Preço (R$)"
-                                        value={v.price}
-                                        onChange={(e) => handleVariantChange(idx, 'price', e.target.value)}
-                                        className="border p-2 rounded-lg text-gray-700 focus:ring-2 focus:ring-secondary outline-none w-24"
-                                        required
-                                    />
+                                    <div className="relative flex items-center">
+                                        <span className="absolute left-3 text-gray-700 text-sm font-semibold">R$</span>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            placeholder="0,00"
+                                            value={v.price}
+                                            onChange={(e) => handleVariantChange(idx, 'price', e.target.value)}
+                                            className="border p-2 pl-9 rounded-lg text-gray-700 focus:ring-2 focus:ring-secondary outline-none w-32"
+                                            required
+                                        />
+                                    </div>
                                     {variants.length > 1 && (
                                         <button
                                             type="button"

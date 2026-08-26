@@ -23,25 +23,24 @@ export default async function Home() {
   return (
     <div className="bg-white min-h-screen flex flex-col">
       {/* Cabeçalho Público */}
-      <header className="bg-tertiary text-white py-6 shadow-md" >
+      <header className="bg-tertiary rounded-b-3xl text-white py-6 shadow-md" >
         <div className="flex flex-column justify-center px-4 sm:px-6 lg:px-8">
           <Image
-            src="/logo-3.png"
+            src="/logo-oficial.png"
             alt="Logo Perseverança Store"
-            className='rounded-lg'
-            width={150}
-            height={150}
+            width={127}
+            height={123}
+
           />
-        {/*   <div className='ml-8'>
-            <h1 className="text-2xl/7 mt-6 font-bold font-besley text-white uppercase sm:text-4xl">Persevera Store</h1>
-            <p className="text-sm mt-1 font-normal text-secondary font-sans text-black">Produtos que levam nossa missão para além da Pastoral. </p>
-          </div> */}
+          <div className='ml-4'>
+            <h1 className="text-2xl my-6 font-bold font-besley text-primary uppercase">Perseverança Store</h1>
+            <p className="text-sm mt-1 font-bold text-secondary font-sans">Produtos que levam nossa missão para além da Pastoral. </p>
+          </div>
         </div>
       </header>
 
       {/* Corpo da Vitrine */}
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <h1 className="text-center text-2xl my-6 font-bold font-besley text-primary uppercase">Perseverança Store</h1>
         {products && products.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {products.map((product) => (
@@ -57,12 +56,22 @@ export default async function Home() {
       </main>
 
       {/* Rodapé */}
-      <footer className="bg-tertiary text-gray-900 py-8 px-4 rounded-t-3xl shadow-md mt-8">
+      <footer className="bg-[#F7F7F7] text-gray-900 py-8 px-4 rounded-t-3xl shadow-md mt-8">
         <div
           className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
-          <div>
-            <h2 className="text-lg font-bold">Paróquia Santo Antônio do Menino Deus</h2>
-            <p className="text-sm">Rua Rejane Freire Correia, n. 2015, João Pessoa, PB, Brazil</p>
+          <div className='p-4 flex justify-between items-start text-center'>
+            <Image
+              src="/logo-paroquia-dark.jpeg"
+              alt="Logo Perseverança Store"
+              width={80}
+              height={80}
+              className='h-auto'
+
+            />
+            <div className='ml-8 text-start flex flex-col justify-center gap-3'>
+              <h2 className="text-lg font-bold">Paróquia Santo Antônio do Menino Deus</h2>
+              <p className="text-sm">Rua Rejane Freire Correia, n. 2015, João Pessoa, PB, Brazil</p>
+            </div>
           </div>
 
           <div className="flex items-center gap-6">

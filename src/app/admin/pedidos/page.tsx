@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { maskPhone, formatCurrency } from '@/lib/formatters'
 
 interface OrderItem {
   id: string
@@ -210,16 +211,17 @@ export default function AdminOrdersPage() {
                   <div className="grid md:grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="text-gray-600 flex items-center gap-2">
-                        <strong>Telefone:</strong> {order.customer_phone}
+                        <strong>Telefone:</strong> {maskPhone(order.customer_phone)}
                         <a
                           href={getWhatsAppLink(order.customer_phone, order.short_id)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-medium hover:bg-green-200 transition-colors"
+                          className="inline-flex items-center gap-1 text-xs bg-green-100 text-green-800 px-2.5 py-1 rounded font-medium hover:bg-green-200 transition-colors"
                         >
                           Abrir WhatsApp
                         </a>
                       </p>
+                      
                       {order.observations && <p className="text-gray-600 mt-1"><strong>Obs:</strong> {order.observations}</p>}
                       <p className="text-gray-400 text-xs mt-2">
                         Data: {new Date(order.created_at).toLocaleDateString('pt-BR')} às {new Date(order.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
@@ -232,13 +234,13 @@ export default function AdminOrdersPage() {
                         {order.order_items?.map((item) => (
                           <li key={item.id} className="flex justify-between text-xs text-gray-700">
                             <span>{item.quantity}x Opção: <strong>{item.variant_name}</strong></span>
-                            <span className="font-medium">R$ {(item.unit_price * item.quantity).toFixed(2).replace('.', ',')}</span>
+                            <span className="font-medium">{formatCurrency(item.unit_price * item.quantity)}</span>
                           </li>
                         ))}
                       </ul>
                       <div className="border-t mt-2 pt-2 flex justify-between font-bold text-sm text-gray-800">
                         <span>Total do Pedido:</span>
-                        <span className="text-primary">R$ {order.total_amount.toFixed(2).replace('.', ',')}</span>
+                        <span className="text-primary">{formatCurrency(order.total_amount)}</span>
                       </div>
                     </div>
                   </div>

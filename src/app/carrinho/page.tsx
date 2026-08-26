@@ -4,18 +4,24 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
 import { createClient } from '@/lib/supabase/client'
+import { maskPhone } from '@/lib/formatters'
+
+interface CopyTextProps {
+  text: string;
+}
 
 export default function CartPage() {
   const supabase = createClient()
   const [isMounted, setIsMounted] = useState(false)
   const { items, removeItem, updateQuantity, getTotal, clearCart } = useCartStore()
-  
+
   // Formulário do Comprador
   const [customerName, setCustomerName] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
   const [childName, setChildName] = useState('')
   const [observation, setObservation] = useState('')
-  
+  const [copied, setCopied] = useState<boolean>(false);
+
   // Estados do Pedido Criado
   const [submitting, setSubmitting] = useState(false)
   const [completedOrder, setCompletedOrder] = useState<{
@@ -30,6 +36,23 @@ export default function CartPage() {
   if (!isMounted) return null
 
   const total = getTotal()
+  function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const maskedValue = maskPhone(e.target.value)
+    setCustomerPhone(maskedValue)
+  }
+
+
+  const pixKey = 'psamdperseveranca@gmail.com'
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(pixKey)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Erro ao copiar chave PIX:', err)
+    }
+  }
 
   async function handleFinalizeOrder(e: React.FormEvent) {
     e.preventDefault()
@@ -91,7 +114,7 @@ export default function CartPage() {
 
     // ATENÇÃO: Insira o número real da Pastoral com DDD (ex: 5583999999999)
     console.log(process.env.NEXT_PUBLIC_PHONE_NUMBER)
-    const pastoralPhone =  process.env.NEXT_PUBLIC_PHONE_NUMBER || '5588994885659'
+    const pastoralPhone = process.env.NEXT_PUBLIC_PHONE_NUMBER || '5588994885659'
 
 
 
@@ -119,9 +142,27 @@ export default function CartPage() {
 
           {/* Dados do PIX */}
           <div className="bg-gray-50 p-4 rounded-lg border text-left space-y-2">
-            <span className="text-xs font-semibold text-secondary uppercase block">Pagamento via PIX</span>
-            <p className="text-sm text-gray-700"><strong>Chave PIX (E-mail):</strong> pastoral@email.com</p>
-            <p className="text-sm text-gray-700"><strong>Valor Total:</strong> R$ {completedOrder.total.toFixed(2).replace('.', ',')}</p>
+            <span className="text-xs font-bold text-primary uppercase block">Pagamento via PIX</span>
+
+            <div>
+              <span className="text-xs text-gray-700 block mb-1">Chave PIX (E-mail):</span>
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="w-full flex items-center justify-between p-2.5 bg-white hover:bg-gray-100 border rounded-lg text-left transition-colors group focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <span className="text-sm text-gray-700 truncate underline decoration-primary underline-offset-2 group-hover:text-primary">
+                  {pixKey}
+                </span>
+                <span
+                  className={`shrink-0 text-xs font-bold px-2.5 py-1 rounded transition-colors ${copied ? 'bg-green-600 text-white' : 'bg-primary text-white'
+                    }`}
+                >
+                  {copied ? '✓ Copiado!' : 'Copiar'}
+                </span>
+              </button>
+            </div>
+            <p className="text-sm text-gray-700"><strong>Valor Total: </strong> R$ {completedOrder.total.toFixed(2).replace('.', ',')}</p>
           </div>
 
           <div className="space-y-3">
@@ -131,7 +172,7 @@ export default function CartPage() {
             >
               Enviar Comprovante via WhatsApp
             </button>
-            
+
             <Link href="/" className="block text-sm text-gray-500 hover:text-brand pt-2">
               Voltar para a página inicial
             </Link>
@@ -163,7 +204,7 @@ export default function CartPage() {
           </div>
         ) : (
           <form onSubmit={handleFinalizeOrder} className="flex flex-col md:flex-row gap-8">
-            
+
             {/* Lista de Itens */}
             <div className="md:w-1/2 bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
               <h2 className="text-xl font-bold text-brand border-b pb-3">Itens do Pedido</h2>
@@ -196,7 +237,7 @@ export default function CartPage() {
             {/* Identificação do Responsável */}
             <div className="md:w-1/2 bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
               <h2 className="text-xl font-bold text-brand border-b pb-3">Dados para Encomenda</h2>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Responsável *</label>
                 <input
@@ -210,12 +251,13 @@ export default function CartPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Telefone / WhatsApp *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp / Telefone *</label>
                 <input
                   type="tel"
                   required
                   value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  onChange={handlePhoneChange}
+                  maxLength={15} // (83) 99999-9999 tem 15 caracteres
                   placeholder="(83) 99999-9999"
                   className="w-full border p-2 rounded  text-black focus:ring-2 focus:ring-primary outline-none"
                 />
