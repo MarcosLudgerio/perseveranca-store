@@ -93,9 +93,6 @@ export default function ProductForm({ product, variants }: ProductFormProps) {
             >
               +
             </button>
-            <button className="bg-secondary text-white font-bold text-sm px-3 py-1.5 rounded-lg hover:bg-[#727432] group-hover:text-white transition-colors shadow-sm">
-              Detalhes
-            </button>
           </div>
         </div>
 

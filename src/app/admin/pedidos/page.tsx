@@ -37,6 +37,7 @@ export default function AdminOrdersPage() {
   const supabase = createClient()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'list' | 'summary'>('list')
 
   async function fetchOrders() {
@@ -59,6 +60,7 @@ export default function AdminOrdersPage() {
   }, [])
 
   async function handleStatusChange(orderId: string, newStatus: Order['status']) {
+    setUpdatingId(orderId)
     const { error } = await supabase
       .from('orders')
       .update({ status: newStatus })
@@ -71,9 +73,18 @@ export default function AdminOrdersPage() {
         prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
       )
     }
+    setUpdatingId(null)
   }
 
-  // Consolida o total de itens por tamanho para a serigrafia/fornecedor
+  // Gera o link direto do WhatsApp tratando o DDD e código do país
+  function getWhatsAppLink(phone: string, orderShortId: string) {
+    const cleanPhone = phone.replace(/\D/g, '')
+    const formattedPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`
+    const text = encodeURIComponent(`Olá! Estou entrando em contato sobre o pedido ${orderShortId} da Pastoral.`)
+    return `https://wa.me/${formattedPhone}?text=${text}`
+  }
+
+  // Consolida o total de itens por variação para a serigrafia/fornecedor
   const productionSummary = orders
     .filter((o) => o.status === 'pago' || o.status === 'em_producao')
     .flatMap((o) => o.order_items)
@@ -85,29 +96,27 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-primary text-white py-4 shadow-sm">
+      <header className="bg-tertiary text-primary py-2 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/admin/produtos" className="text-pink-100 hover:text-white text-sm font-medium">
-              ← Cadastrar Produtos
+          <div className="flex items-center">
+            <Link href="/admin/produtos" className="text-primary hover:text-secondary font-medium w-16">
+              {"<"}
             </Link>
-            <h1 className="text-xl font-bold">Gestão de Pedidos</h1>
+            <h1 className="text-xl font-medium">Gestão de Pedidos</h1>
           </div>
 
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode('list')}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'list' ? 'bg-white text-primary' : 'bg-primary-hover text-white'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-white text-primary hover:bg-primary/50 hover:text-primary/60 transition-all duration-200 active:bg-primary/50 active:scale-95'
+                }`}
             >
               Lista de Encomendas
             </button>
             <button
               onClick={() => setViewMode('summary')}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'summary' ? 'bg-white text-primary' : 'bg-primary-hover text-white'
-              }`}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'summary' ? 'bg-primary text-white' : 'bg-white text-primary hover:bg-primary/50 hover:text-primary/60 transition-all duration-200 active:bg-primary/50 active:scale-95' 
+                }`}
             >
               Resumo Produção
             </button>
@@ -121,9 +130,9 @@ export default function AdminOrdersPage() {
         ) : viewMode === 'summary' ? (
           /* Visão Consolidada para Serigrafia */
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 className="text-xl font-bold text-brandText mb-2">Totais para Confecção (Pedidos Pagos/Em Produção)</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">Totais para Confecção (Pagos / Em Produção)</h2>
             <p className="text-sm text-gray-500 mb-6">Utilize estes totais para encomendar os tamanhos exatos com o fornecedor.</p>
-            
+
             {Object.keys(productionSummary).length === 0 ? (
               <p className="text-gray-400">Nenhum pedido marcado como Pago ou Em Produção ainda.</p>
             ) : (
@@ -150,15 +159,17 @@ export default function AdminOrdersPage() {
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b pb-3">
                     <div>
                       <span className="font-mono text-sm font-bold text-primary mr-3">{order.short_id}</span>
-                      <strong className="text-brandText text-lg">{order.customer_name}</strong>
+                      <strong className="text-gray-800 text-lg">{order.customer_name}</strong>
                       {order.child_name && <span className="text-sm text-gray-500 ml-2">(Criança: {order.child_name})</span>}
                     </div>
 
                     <div className="flex items-center gap-3">
                       <select
                         value={order.status}
+                        disabled={updatingId === order.id}
                         onChange={(e) => handleStatusChange(order.id, e.target.value as Order['status'])}
-                        className={`text-xs font-bold px-3 py-1.5 rounded-full outline-none cursor-pointer ${STATUS_LABELS[order.status].bg}`}
+                        className={`text-xs font-bold px-3 py-1.5 rounded-full outline-none cursor-pointer border-none ${STATUS_LABELS[order.status].bg
+                          } ${updatingId === order.id ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <option value="aguardando_pix">Aguardando PIX</option>
                         <option value="pago">Pago / Confirmado</option>
@@ -171,9 +182,19 @@ export default function AdminOrdersPage() {
 
                   <div className="grid md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600"><strong>Telefone:</strong> {order.customer_phone}</p>
-                      {order.observations && <p className="text-gray-600"><strong>Obs:</strong> {order.observations}</p>}
-                      <p className="text-gray-400 text-xs mt-1">
+                      <p className="text-gray-600 flex items-center gap-2">
+                        <strong>Telefone:</strong> {order.customer_phone}
+                        <a
+                          href={getWhatsAppLink(order.customer_phone, order.short_id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-medium hover:bg-green-200 transition-colors"
+                        >
+                          Abrir WhatsApp
+                        </a>
+                      </p>
+                      {order.observations && <p className="text-gray-600 mt-1"><strong>Obs:</strong> {order.observations}</p>}
+                      <p className="text-gray-400 text-xs mt-2">
                         Data: {new Date(order.created_at).toLocaleDateString('pt-BR')} às {new Date(order.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
@@ -188,7 +209,7 @@ export default function AdminOrdersPage() {
                           </li>
                         ))}
                       </ul>
-                      <div className="border-t mt-2 pt-2 flex justify-between font-bold text-sm text-brandText">
+                      <div className="border-t mt-2 pt-2 flex justify-between font-bold text-sm text-gray-800">
                         <span>Total do Pedido:</span>
                         <span className="text-primary">R$ {order.total_amount.toFixed(2).replace('.', ',')}</span>
                       </div>

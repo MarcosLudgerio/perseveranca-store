@@ -17,7 +17,7 @@ export default function AdminDashboardPage() {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-4xl font-mono font-bold text-primary uppercase mb-6">
             Painel da Pastoral
           </h1>
           <button
