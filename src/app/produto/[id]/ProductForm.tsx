@@ -14,21 +14,12 @@ export default function ProductForm({ product, variants }: ProductFormProps) {
   const router = useRouter()
   const addItem = useCartStore((state) => state.addItem)
 
-
-  const defaultVariant: ProductVariant = variants && variants.length > 0 ? variants[0] : {
-    id: 'default',
-    product_id: product.id,
-    name: 'Única',
-    price: 0,
-    stock: 0,
-  }
-
-  // Seleciona a primeira variação por padrão
+ // Seleciona a primeira variação por padrão
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(variants[0])
   const [quantity, setQuantity] = useState(1)
 
   function handleAddToCart(e: React.MouseEvent<HTMLButtonElement>) {
-    const variantToUse = selectedVariant || defaultVariant
+    const variantToUse = selectedVariant
     if (!selectedVariant) return
 
     try {

@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ProductForm from './ProductForm'
-import { Product } from '@/types'
+import { Product, ProductVariant} from '@/types'
 
 // Tipagem corrigida para Next.js 13+ (params devem ser esperados de forma assíncrona/estruturada)
 interface PageProps {
@@ -25,7 +25,7 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   const sortedVariants = (product.product_variants || []).sort(
-    (a, b) => (a.display_order || 0) - (b.display_order || 0)
+    (a: ProductVariant, b: ProductVariant) => (a.display_order || 0) - (b.display_order || 0)
   )
 
   return (
