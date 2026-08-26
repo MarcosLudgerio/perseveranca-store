@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
 
 interface OrderItem {
   id: string
@@ -55,6 +56,13 @@ export default function AdminOrdersPage() {
     setLoading(false)
   }
 
+  const router = useRouter()
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
   useEffect(() => {
     fetchOrders()
   }, [])
@@ -97,28 +105,47 @@ export default function AdminOrdersPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-tertiary text-primary py-2 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/admin/produtos" className="text-primary hover:text-secondary font-medium w-16">
-              {"<"}
-            </Link>
-            <h1 className="text-xl font-medium">Gestão de Pedidos</h1>
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <nav className="flex justify-around">
+              <div className="flex gap-4 text-sm font-medium">
+
+                <Link href="/admin" className="hover:text-white transition-colors">
+                  Dashboard
+                </Link>
+                <Link href="/admin/produtos" className="hover:text-white transition-colors">
+                  Produtos
+                </Link>
+                <Link href="/admin/pedidos" className="font-bold underline underline-offset-4">
+                  Pedidos
+                </Link>
+              </div>
+
+            </nav>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-6 self-center sm:self-auto">
+            <div className="flex gap-8">
+              <button
+                onClick={() => setViewMode('list')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-white text-primary hover:bg-primary/50 hover:text-primary/60 transition-all duration-200 active:bg-primary/50 active:scale-95'
+                  }`}
+              >
+                Lista de Encomendas
+              </button>
+              <button
+                onClick={() => setViewMode('summary')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'summary' ? 'bg-primary text-white' : 'bg-white text-primary hover:bg-primary/50 hover:text-primary/60 transition-all duration-200 active:bg-primary/50 active:scale-95'
+                  }`}
+              >
+                Resumo Produção
+              </button>
+            </div>
             <button
-              onClick={() => setViewMode('list')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-white text-primary hover:bg-primary/50 hover:text-primary/60 transition-all duration-200 active:bg-primary/50 active:scale-95'
-                }`}
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm font-medium"
             >
-              Lista de Encomendas
-            </button>
-            <button
-              onClick={() => setViewMode('summary')}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'summary' ? 'bg-primary text-white' : 'bg-white text-primary hover:bg-primary/50 hover:text-primary/60 transition-all duration-200 active:bg-primary/50 active:scale-95' 
-                }`}
-            >
-              Resumo Produção
+              Sair
             </button>
           </div>
         </div>
