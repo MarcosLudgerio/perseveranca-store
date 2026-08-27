@@ -30,7 +30,7 @@ export default function AdminProductsPage() {
 
     async function handleLogout() {
         await supabase.auth.signOut()
-        router.push('/login')
+        router.push('/admin/login')
     }
 
     // Variações (Tamanhos e Preços)
@@ -216,13 +216,13 @@ export default function AdminProductsPage() {
                 <div className="max-w-5xl mx-auto px-4 flex items-center justify-between">
                     <div className="flex items-center gap-6">
                         <nav className="flex gap-4 text-sm font-medium">
-                            <Link href="/admin" className="hover:text-white transition-colors">
+                            <Link href="/admin" className="hover:text-secondary transition-colors">
                                 Dashboard
                             </Link>
                             <Link href="/admin/produtos" className="font-bold underline underline-offset-4">
                                 Produtos
                             </Link>
-                            <Link href="/admin/pedidos" className="hover:text-white transition-colors">
+                            <Link href="/admin/pedidos" className="hover:text-secondary transition-colors">
                                 Pedidos
                             </Link>
                         </nav>

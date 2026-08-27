@@ -61,7 +61,7 @@ export default function AdminOrdersPage() {
 
   async function handleLogout() {
     await supabase.auth.signOut()
-    router.push('/login')
+    router.push('/admin/login')
   }
 
   useEffect(() => {
@@ -111,10 +111,10 @@ export default function AdminOrdersPage() {
             <nav className="flex justify-around">
               <div className="flex gap-4 text-sm font-medium">
 
-                <Link href="/admin" className="hover:text-white transition-colors">
+                <Link href="/admin" className="hover:text-secondary transition-colors">
                   Dashboard
                 </Link>
-                <Link href="/admin/produtos" className="hover:text-white transition-colors">
+                <Link href="/admin/produtos" className="hover:text-secondary transition-colors">
                   Produtos
                 </Link>
                 <Link href="/admin/pedidos" className="font-bold underline underline-offset-4">
