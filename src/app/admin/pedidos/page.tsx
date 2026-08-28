@@ -86,10 +86,10 @@ export default function AdminOrdersPage() {
   }
 
   // Gera o link direto do WhatsApp tratando o DDD e código do país
-  function getWhatsAppLink(phone: string, orderShortId: string) {
+  function getWhatsAppLink(name:string, phone: string, orderShortId: string) {
     const cleanPhone = phone.replace(/\D/g, '')
     const formattedPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`
-    const text = encodeURIComponent(`Olá! Estou entrando em contato sobre o pedido ${orderShortId} da Pastoral.`)
+    const text = encodeURIComponent(`Olá, ${name}! Estou entrando em contato sobre o pedido ${orderShortId} da Pastoral.`)
     return `https://wa.me/${formattedPhone}?text=${text}`
   }
 
@@ -183,6 +183,7 @@ export default function AdminOrdersPage() {
               </div>
             ) : (
               orders.map((order) => (
+                
                 <div key={order.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b pb-3">
                     <div>
@@ -213,7 +214,7 @@ export default function AdminOrdersPage() {
                       <p className="text-gray-600 flex items-center gap-2">
                         <strong>Telefone:</strong> {maskPhone(order.customer_phone)}
                         <a
-                          href={getWhatsAppLink(order.customer_phone, order.short_id)}
+                          href={getWhatsAppLink(order.customer_name, order.customer_phone, order.short_id)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-xs bg-green-100 text-green-800 px-2.5 py-1 rounded font-medium hover:bg-green-200 transition-colors"

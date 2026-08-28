@@ -26,6 +26,7 @@
   --font-sans: var(--font-times);
   --font-besley: var(--font-besley);
   --font-mono: var(--font-geist-mono);
+  --shadow-3xl: 0 0 5px rgba(0, 0, 0, 0.20); 
 }
 
 @media (prefers-color-scheme: dark) {

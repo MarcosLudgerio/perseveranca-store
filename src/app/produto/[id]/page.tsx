@@ -32,7 +32,7 @@ export default async function ProductPage({ params }: PageProps) {
     <div className="min-h-screen bg-white flex flex-col">
       <header className="bg-tertiary text-primary py-2 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <Link href="/" className="text-primary hover:text-secondary font-medium w-20">
+          <Link href="/" className="text-primary hover:text-secondary active:text-secondary/70 font-medium w-20">
             {"< Voltar"}
           </Link>
           <div className='flex w-100 justify-center'>

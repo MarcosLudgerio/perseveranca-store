@@ -43,7 +43,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                         R$ {lowestPrice.toFixed(2).replace('.', ',')}
                     </div>
 
-                    <button className="bg-secondary text-white font-bold text-sm px-3 py-1.5 rounded-lg hover:bg-[#727432] group-hover:text-white transition-colors shadow-sm">
+                    <button className="bg-secondary text-white font-bold text-sm px-3 py-1.5 rounded-lg hover:bg-[#727432] active:bg-heading/70 transition-colors shadow-sm">
                         Detalhes
                     </button>
                 </div>

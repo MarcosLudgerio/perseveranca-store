@@ -23,14 +23,14 @@ export default async function Home() {
   return (
     <div className="bg-white min-h-screen flex flex-col">
       {/* Cabeçalho Público */}
-      <header className="bg-tertiary rounded-b-3xl text-white py-6 shadow-md" >
+      <header className="bg-[#F7F7F7] rounded-b-3xl text-white py-6 shadow-md" >
         <div className="flex flex-column justify-center px-4 sm:px-6 lg:px-8">
           <Image
             src="/logo-oficial.png"
             alt="Logo Perseverança Store"
             width={127}
             height={123}
-
+            style={{ width: 'auto', height: 'auto' }}
           />
           <div className='ml-4'>
             <h1 className="text-2xl my-6 font-bold font-besley text-primary uppercase">Perseverança Store</h1>
@@ -56,16 +56,16 @@ export default async function Home() {
       </main>
 
       {/* Rodapé */}
-      <footer className="bg-[#F7F7F7] text-gray-900 py-8 px-4 rounded-t-3xl shadow-md mt-8">
+      <footer className="bg-[#F7F7F7]  shadow-3xl text-gray-900 py-8 px-4 rounded-t-3xl">
         <div
-          className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+          className="max-w-7xl mx-auto  flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
           <div className='p-4 flex justify-between items-start text-center'>
             <Image
               src="/logo-paroquia-dark.jpeg"
               alt="Logo Perseverança Store"
               width={80}
               height={80}
-              className='h-auto'
+              style={{ width: 'auto', height: 'auto' }}
 
             />
             <div className='ml-8 text-start flex flex-col justify-center gap-3'>

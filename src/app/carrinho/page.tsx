@@ -187,7 +187,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-white flex flex-col">
       <header className="bg-tertiary text-primary py-4 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <Link href="/" className="hover:text-pink-200 font-medium">
+          <Link href="/" className="hover:text-secondary  active:text-secondary/70 font-medium">
             ← Continuar Comprando
           </Link>
           <h1 className="text-xl font-bold">Seu Carrinho</h1>
@@ -198,7 +198,7 @@ export default function CartPage() {
         {items.length === 0 ? (
           <div className="text-center py-20 bg-tertiary rounded-xl shadow-sm border border-gray-100">
             <h2 className="text-2xl font-bold text-brand mb-4">Seu carrinho está vazio</h2>
-            <Link href="/" className="bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:bg-[#727432] transition-colors">
+            <Link href="/" className="bg-secondary text-white px-6 py-3 rounded-lg font-medium active:bg-heading/70 hover:bg-[#727432] transition-colors">
               Ir para a Vitrine
             </Link>
           </div>
