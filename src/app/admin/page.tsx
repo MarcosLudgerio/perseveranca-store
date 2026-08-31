@@ -114,22 +114,8 @@ export default function AdminDashboardPage() {
         {/* Banner de Boas-Vindas */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 font-besley">Visão Geral das Vendas</h2>
-            <p className="text-sm text-gray-500">Acompanhe seus pedidos, faturamento e catálogo de produtos.</p>
-          </div>
-          <div className="flex gap-3">
-            <Link
-              href="/admin/pedidos"
-              className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
-            >
-              Ver Pedidos
-            </Link>
-            <Link
-              href="/admin/produtos"
-              className="bg-heading hover:bg-heading/80  active:bg-heading/80  text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
-            >
-              Gerenciar Produtos
-            </Link>
+            <h2 className="text-3xl font-bold text-primary font-besley">Visão Geral das Vendas</h2>
+            <p className="text-md text-gray-500">Acompanhamento de pedidos, catálogo de produtos, faturamento.</p>
           </div>
         </div>
 

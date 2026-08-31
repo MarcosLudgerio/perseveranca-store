@@ -18,6 +18,7 @@ export default function CartPage() {
   // Formulário do Comprador
   const [customerName, setCustomerName] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
+  const [phoneError, setPhoneError] = useState('');
   const [childName, setChildName] = useState('')
   const [observation, setObservation] = useState('')
   const [copied, setCopied] = useState<boolean>(false);
@@ -37,8 +38,19 @@ export default function CartPage() {
 
   const total = getTotal()
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const maskedValue = maskPhone(e.target.value)
-    setCustomerPhone(maskedValue)
+    const maskedValue = maskPhone(e.target.value);
+
+    setCustomerPhone(maskedValue);
+
+    const digits = maskedValue.replace(/\D/g, '');
+
+    if (digits.length > 0 && digits.length < 10) {
+      setPhoneError(
+        'O telefone deve possuir 10 ou 11 dígitos.'
+      );
+    } else {
+      setPhoneError('');
+    }
   }
 
 
@@ -48,7 +60,7 @@ export default function CartPage() {
     try {
       await navigator.clipboard.writeText(pixKey)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setTimeout(() => setCopied(false), 3000)
     } catch (err) {
       console.error('Erro ao copiar chave PIX:', err)
     }
@@ -59,6 +71,15 @@ export default function CartPage() {
     if (!customerName.trim() || !customerPhone.trim()) {
       alert('Por favor, preencha seu nome e telefone.')
       return
+    }
+    const digits = customerPhone.replace(/\D/g, '');
+
+    if (digits.length < 10 || digits.length > 11) {
+      setPhoneError(
+        'Informe um telefone válido com 10 ou 11 dígitos.'
+      );
+
+      return;
     }
 
     setSubmitting(true)
@@ -257,10 +278,16 @@ export default function CartPage() {
                   required
                   value={customerPhone}
                   onChange={handlePhoneChange}
-                  maxLength={15} // (83) 99999-9999 tem 15 caracteres
+                  maxLength={15}
                   placeholder="(83) 99999-9999"
-                  className="w-full border p-2 rounded  text-black focus:ring-2 focus:ring-primary outline-none"
+                  className="w-full border p-2 rounded text-black focus:ring-2 focus:ring-primary outline-none"
                 />
+
+                {phoneError && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {phoneError}
+                  </p>
+                )}
               </div>
 
               <div>
